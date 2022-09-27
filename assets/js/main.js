@@ -15,8 +15,8 @@ function price() {
   alert("El precio total es: $" + totalPrice);
   let confirm = prompt(
     'Ingrese "Si" para confirmar su compra y realizar el pago'
-  );
-  if (confirm == "Si") {
+  ).toLowerCase();
+  if (confirm == "si") {
     alert("Gracias por su compra!");
   } else {
     alert("Gracias por su visita!");
@@ -27,24 +27,24 @@ alert("Bienvenido a MirQueen!");
 
 let option = prompt(
   "En qué te puedo ayudar? Ingresá lo que necesitas \n - Servicios\n - Precios\n - Reserva\n ESC para salir"
-);
+).toLowerCase();
 
-while (option != "ESC") {
-  if (option == "Servicios") {
+while (option != "esc") {
+  if (option == "servicios") {
     let servicios = prompt(
       "Ingrese el servicio que desea comprar!\n Nuestros servicios son: \n - Maquillaje\n - Uñas\n - Ambos"
-    );
-    if (servicios == "Maquillaje") {
+    ).toLowerCase();
+    if (servicios == "maquillaje") {
       totalPrice = service.makeUp.price;
       price(totalPrice);
-    } else if (servicios == "Uñas") {
+    } else if (servicios == "uñas") {
       totalPrice = service.nail.price;
       price(totalPrice);
-    } else if (servicios == "Ambos") {
+    } else if (servicios == "ambos") {
       totalPrice = service.makeUp.price + service.nail.price;
       price(totalPrice);
     }
-  } else if (option == "Precios") {
+  } else if (option == "precios") {
     alert(
       "Los precios de nuestros servicios: " +
         "\n - Maquillaje: $" +
@@ -52,18 +52,21 @@ while (option != "ESC") {
         "\n - Uñas: $" +
         service.nail.price
     );
-  } else if (option == "Reserva") {
+  } else if (option == "reserva") {
     let reserve = prompt(
       "Ingresá la fecha y el horario que desea reservar el turno"
     );
-
-    alert("Tu turno se registró para el día " + reserve);
+    if (reserve == "") {
+      alert("Ingresá la fecha y el horario.");
+    } else {
+      alert("Tu turno se registró para el día " + reserve);
+    }
   } else {
     alert("Ingresá una opción correcta.");
   }
   option = prompt(
-    "En qué te puedo ayudar? Ingresa lo que necesitas \n - Servicios\n - Precio\n - Reserva\n ESC para salir"
-  );
+    "En qué te puedo ayudar? Ingresa lo que necesitas \n - Servicios\n - Precios\n - Reserva\n ESC para salir"
+  ).toLowerCase();
 }
 
 //! Swiper Slider (slider de maquillaje)
@@ -84,3 +87,11 @@ var swiper = new Swiper(".slide-content", {
     prevEl: ".swiper-button-prev",
   },
 });
+
+// Responsive bar menu
+
+document.getElementById("menu-icon").addEventListener("click", mostrar_menu);
+
+function mostrar_menu() {
+  document.querySelector(".navbar").classList.toggle("mostrar_menu");
+}
