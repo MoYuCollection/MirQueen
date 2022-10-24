@@ -1,0 +1,56 @@
+{
+    "makeUps":[
+        {
+          "id": 1,
+          "name": "Maquillaje de día",
+          "price": 3500
+        },
+        {
+          "id": 2,
+          "name": "Maquillaje de día con toques resaltados",
+          "price": 4000
+        },
+        {
+          "id": 3,
+          "name": "Maquillaje teatral",
+          "price": 6000
+        },
+        {
+          "id": 4,
+          "name": "Maquillaje para fotos",
+          "price": 5500
+        },
+        {
+          "id": 5,
+          "name": "Maquillaje de noche",
+          "price": 5500
+        }
+      ],
+      "nails":[
+        {
+            "id": 1,
+            "name": "Uñas en acrílico",
+            "price": 2500
+          },
+          {
+            "id": 2,
+            "name": "Uñas en acabado ballerina",
+            "price": 2800
+          },
+          {
+            "id": 3,
+            "name": "Uñas solares",
+            "price": 3000
+          },
+          {
+            "id": 4,
+            "name": "Uñas de porcelana",
+            "price": 3150
+          },
+          {
+            "id": 5,
+            "name": "Uñas gelificadas",
+            "price": 4200
+          }
+      ]
+}

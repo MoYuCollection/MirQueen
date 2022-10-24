@@ -55,129 +55,176 @@ const nails = [
   },
 ];
 
-const makeupNames = makeUps.map((makeUps) => makeUps.name);
-const makeupPrices = makeUps.map((makeUps) => makeUps.price);
-const makeupNamePrice = makeUps.map(
-  (makeUps) => `${makeUps.name} : $ ${makeUps.price}`
-);
-
-const nailNames = nails.map((nails) => nails.name);
-const nailPrices = nails.map((nails) => nails.price);
-const nailNamePrice = nails.map((nails) => `${nails.name} : $ ${nails.price}`);
-
-let totalPrice = 0;
-
-// Funciones
-
-function price() {
-  alert("El precio total es: $" + totalPrice);
-  let confirm = prompt(
-    'Ingrese "Si" para confirmar su compra y realizar el pago'
-  ).toLowerCase();
-  if (confirm == "si") {
-    alert("Gracias por su compra!");
-  } else {
-    alert("Gracias por su visita!");
-  }
-}
-
-// Funciones para extraer el precio
-
-function makeupPrice(totalPrice, id) {
-  totalPrice = makeUps.find((makeUps) => makeUps.id === id).price;
-  return totalPrice;
-}
-
-function nailPrice(totalPrice, id) {
-  totalPrice = nails.find((nails) => nails.id === id).price;
-  return totalPrice;
-}
-
-alert("Bienvenidos a MirQueen!");
-
-let option = prompt(
-  "En qué te puedo ayudar? Ingresá lo que necesitas \n - Servicios\n - Precios\n - Reserva\n ESC para salir"
-).toLowerCase();
-
-while (option != "esc") {
-  if (option == "servicios") {
-    let servicios = prompt(
-      "Ingrese el servicio que desea comprar!\n Nuestros servicios son: \n - Maquillaje\n - Uñas"
-    ).toLowerCase();
-    if (servicios == "maquillaje") {
-      let makeup = prompt(
-        `Escribe el maquillaje que desea comprar: \n Nuestros maquillajes son: \n - ${makeupNames.join(
-          "\n -"
-        )}`
-      ).toLowerCase();
-
-      if (makeup === "maquillaje de dia") {
-        totalPrice = makeupPrice(totalPrice, 1);
-        price();
-      } else if (makeup === "maquillaje de dia con toques resaltados") {
-        totalPrice = makeupPrice(totalPrice, 2);
-        price();
-      } else if (makeup === "maquillaje teatral") {
-        totalPrice = makeupPrice(totalPrice, 3);
-        price();
-      } else if (makeup === "maquillaje para fotos" || "maquillaje de noche") {
-        totalPrice = makeupPrice(totalPrice, 4);
-        price();
-      } else {
-        alert("Escribe una opción correcta!");
-      }
-    } else if (servicios == "uñas") {
-      let nail = prompt(
-        `Escribe la uña que desea comprar: \n Nuestras uñas son: \n - ${nailNames.join(
-          "\n -"
-        )}`
-      ).toLowerCase();
-      if (nail === "uñas en acrilico") {
-        totalPrice = nailPrice(totalPrice, 1);
-        price();
-      } else if (nail === "uñas en acabado ballerina") {
-        totalPrice = nailPrice(totalPrice, 2);
-        price();
-      } else if (nail === "uñas solares") {
-        totalPrice = nailPrice(totalPrice, 3);
-        price();
-      } else if (nail === "uñas de porcelana") {
-        totalPrice = nailPrice(totalPrice, 4);
-        price();
-      } else if (nail === "uñas gelificadas") {
-        totalPrice = nailPrice(totalPrice, 5);
-        price();
-      } else {
-        alert("Escribe una opción correcta.");
-      }
-    }
-  } else if (option == "precios") {
-    alert(
-      `Los precios de nuestros servicios: \n Maquillajes: \n - ${makeupNamePrice.join(
-        "\n -"
-      )} \n Uñas: \n - ${nailNamePrice.join("\n -")}`
-    );
-  } else if (option == "reserva") {
-    let reserve = prompt(
-      "Ingresá la fecha y el horario que desea reservar el turno"
-    );
-    if (reserve == "") {
-      alert("Ingresá la fecha y el horario.");
-    } else {
-      alert("Tu turno se registró para el día " + reserve);
-    }
-  } else {
-    alert("Ingresá una opción correcta.");
-  }
-  option = prompt(
-    "En qué te puedo ayudar? Ingresa lo que necesitas \n - Servicios\n - Precios\n - Reserva\n ESC para salir"
-  ).toLowerCase();
-}
-
 // Responsive bar menu
 
 document.getElementById("menu-icon").addEventListener("click", mostrar_menu);
 
 function mostrar_menu() {
   document.querySelector(".navbar").classList.toggle("mostrar_menu");
+}
+
+// SHOPPING CART
+
+// OPEN & CLOSE CART
+
+const cartIconHeader = document.querySelector("#cart-icon-header");
+const cart = document.querySelector(".cart");
+const cartClose = document.querySelector("#cart-close");
+
+cartIconHeader.addEventListener("click", () => {
+  cart.classList.add("active");
+});
+
+cartClose.addEventListener("click", () => {
+  cart.classList.remove("active");
+});
+
+// Start when the document is ready
+
+if (document.readyState == "loading") {
+  document.addEventListener("DOMContentLoaded", start);
+} else {
+  start();
+}
+
+// START
+function start() {
+  addEvents();
+}
+
+// UPDATE & RERENDER
+function update() {
+  addEvents();
+  updateTotal();
+
+  // Save cart to local storage
+  localStorage.setItem("CART", JSON.stringify(itemsAdded));
+}
+
+// ADD EVENTS
+function addEvents() {
+  // Remove items from cart
+  let cartRemove_btns = document.querySelectorAll(".cart-remove");
+  cartRemove_btns.forEach((btn) => {
+    btn.addEventListener("click", handle_removeCartItem);
+  });
+
+  // Change item quantity
+  let cartQuantity_inputs = document.querySelectorAll(".cart-quantity");
+  cartQuantity_inputs.forEach((input) => {
+    input.addEventListener("change", handle_changeItemQuantity);
+  });
+
+  // Add item to cart
+  let addCart_btns = document.querySelectorAll(".add-cart");
+  addCart_btns.forEach((btn) => {
+    btn.addEventListener("click", handle_addCartItem);
+  });
+
+  // Buy Order
+  const buy_btn = document.querySelector(".btn-buy");
+  buy_btn.addEventListener("click", handle_buyOrder);
+}
+
+// HANDLE EVENTS FUNCTIONS
+let itemsAdded = JSON.parse(localStorage.getItem("CART")) || [];
+update();
+
+function handle_addCartItem() {
+  let product = this.parentElement;
+  let title = product.querySelector(".product-name").innerHTML;
+  let price = product.querySelector(".product-price").innerHTML;
+  let imgSrc = product.querySelector(".product-img").src;
+
+  let newToAdd = {
+    title,
+    price,
+    imgSrc,
+  };
+
+  // handle item is already exist
+  if (itemsAdded.find((el) => el.title == newToAdd.title)) {
+    alert("Este producto ya existe en tu carrito!");
+    return;
+  } else {
+    itemsAdded.push(newToAdd);
+  }
+
+  // Add product to cart
+  let cartBoxElement = CartBoxComponent(title, price, imgSrc);
+  let newNode = document.createElement("div");
+  newNode.innerHTML = cartBoxElement;
+  const cartContent = cart.querySelector(".cart-content");
+  cartContent.appendChild(newNode);
+
+  update();
+}
+
+function handle_removeCartItem() {
+  this.parentElement.remove();
+  itemsAdded = itemsAdded.filter(
+    (el) =>
+      el.title !=
+      this.parentElement.querySelector(".cart-product-title").innerHTML
+  );
+
+  update();
+}
+
+function handle_changeItemQuantity() {
+  if (isNaN(this.value) || this.value < 1) {
+    this.value = 1;
+  }
+  this.value = Math.floor(this.value); // to keep it integer
+
+  update();
+}
+
+function handle_buyOrder() {
+  if (itemsAdded.length <= 0) {
+    alert(
+      "Todavia no hay productos para comprar. \nPor favor, agregá productos en el carrito!"
+    );
+    return;
+  }
+  const cartContent = cart.querySelector(".cart-content");
+  cartContent.innerHTML = "";
+  alert("Tu compra ha sido realizada con éxito!");
+  itemsAdded = [];
+
+  update();
+}
+
+// UPDATE & RERENDER FUNTIONS
+
+function updateTotal() {
+  let cartBoxes = document.querySelectorAll(".cart-box");
+  const totalElement = cart.querySelector(".total-price");
+  let total = 0;
+  cartBoxes.forEach((cartBox) => {
+    let priceElement = cartBox.querySelector(".cart-price");
+    let price = parseFloat(priceElement.innerHTML.replace("$", ""));
+    let quantity = cartBox.querySelector(".cart-quantity").value;
+    total += price * quantity;
+  });
+
+  // keep 2 digits after the decimal point
+  total = total.toFixed(2);
+
+  totalElement.innerHTML = "$" + total;
+}
+
+// HTML COMPONENTS
+function CartBoxComponent(title, price, imgSrc) {
+  return `
+  <div class="cart-box">
+<img src="${imgSrc}" alt="" class="cart-img">
+<div class="detail-box">
+  <div class="cart-product-title">${title}</div>
+  <div class="cart-price">${price}</div>
+  <input type="number" value="1" class="cart-quantity">
+</div>
+<!--remove cart -->
+<i class="fa-solid fa-trash cart-remove"></i>
+</div>`;
 }
