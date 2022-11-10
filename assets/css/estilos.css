@@ -535,4 +535,14 @@ nav ul li a .fa-cart-shopping{
         .home-text {
             padding-top: 4rem;
         }
+    .cart{
+        width: 320px;
+    }    
+}
+@media (max-width: 360px) {
+    .cart{
+        width: 280px;
+    }
+
+    
 }

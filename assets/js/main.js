@@ -1,59 +1,59 @@
 // Variables
-const makeUps = [
-  {
-    id: 1,
-    name: "Maquillaje de día",
-    price: 3500,
-  },
-  {
-    id: 2,
-    name: "Maquillaje de día con toques resaltados",
-    price: 4000,
-  },
-  {
-    id: 3,
-    name: "Maquillaje teatral",
-    price: 6000,
-  },
-  {
-    id: 4,
-    name: "Maquillaje para fotos",
-    price: 5500,
-  },
-  {
-    id: 5,
-    name: "Maquillaje de noche",
-    price: 5500,
-  },
-];
+// const makeUps = [
+//   {
+//     id: 1,
+//     name: "Maquillaje de día",
+//     price: 3500,
+//   },
+//   {
+//     id: 2,
+//     name: "Maquillaje de día con toques resaltados",
+//     price: 4000,
+//   },
+//   {
+//     id: 3,
+//     name: "Maquillaje teatral",
+//     price: 6000,
+//   },
+//   {
+//     id: 4,
+//     name: "Maquillaje para fotos",
+//     price: 5500,
+//   },
+//   {
+//     id: 5,
+//     name: "Maquillaje de noche",
+//     price: 5500,
+//   },
+// ];
 
-const nails = [
-  {
-    id: 1,
-    name: "Uñas en acrílico",
-    price: 2500,
-  },
-  {
-    id: 2,
-    name: "Uñas en acabado ballerina",
-    price: 2800,
-  },
-  {
-    id: 3,
-    name: "Uñas solares",
-    price: 3000,
-  },
-  {
-    id: 4,
-    name: "Uñas de porcelana",
-    price: 3150,
-  },
-  {
-    id: 5,
-    name: "Uñas gelificadas",
-    price: 4200,
-  },
-];
+// const nails = [
+//   {
+//     id: 1,
+//     name: "Uñas en acrílico",
+//     price: 2500,
+//   },
+//   {
+//     id: 2,
+//     name: "Uñas en acabado ballerina",
+//     price: 2800,
+//   },
+//   {
+//     id: 3,
+//     name: "Uñas solares",
+//     price: 3000,
+//   },
+//   {
+//     id: 4,
+//     name: "Uñas de porcelana",
+//     price: 3150,
+//   },
+//   {
+//     id: 5,
+//     name: "Uñas gelificadas",
+//     price: 4200,
+//   },
+// ];
 
 // Responsive bar menu
 
@@ -63,20 +63,29 @@ function mostrar_menu() {
   document.querySelector(".navbar").classList.toggle("mostrar_menu");
 }
 
-// SHOPPING CART
+//Get JSON
+fetch("/assets/data/data.json").then((res) => res.json());
+// .then((data) => console.log(data));
 
-// OPEN & CLOSE CART
+// SHOPPING CART
 
 const cartIconHeader = document.querySelector("#cart-icon-header");
 const cart = document.querySelector(".cart");
 const cartClose = document.querySelector("#cart-close");
+const mobileCartIcon = document.querySelector("#cart-icon");
 
+// OPEN & CLOSE CART
 cartIconHeader.addEventListener("click", () => {
   cart.classList.add("active");
 });
 
 cartClose.addEventListener("click", () => {
   cart.classList.remove("active");
+});
+
+// OPEN MOBILE CART
+mobileCartIcon.addEventListener("click", () => {
+  cart.classList.add("active");
 });
 
 // Start when the document is ready
@@ -156,6 +165,19 @@ function handle_addCartItem() {
   newNode.innerHTML = cartBoxElement;
   const cartContent = cart.querySelector(".cart-content");
   cartContent.appendChild(newNode);
+
+  cart.classList.add("active");
+
+  Toastify({
+    text: "Agregaste un producto a tu carrito!",
+    className: "info",
+    gravity: "bottom",
+    style: {
+      background:
+        " linear-gradient(to right, #eb9ac0, #eab5da, #ead0ed, #f1e8f9, #ffffff)",
+      color: "black",
+    },
+  }).showToast();
 
   update();
 }
